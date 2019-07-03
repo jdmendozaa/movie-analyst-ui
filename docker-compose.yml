@@ -1,0 +1,13 @@
+version: "3"
+
+services:
+
+  movie-api:
+    image: node:latest
+    container_name: movie-ui-docker
+    volumes:
+      - ./:/home/app
+    working_dir: /home/app
+    command: bash -c "node server.js"
+    ports:
+      - 3030:3030

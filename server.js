@@ -1,8 +1,8 @@
 // Declare our dependencies
 var express = require('express');
 var request = require('superagent');
-var backendHost = process.env.BACK_HOST || 'host.docker.internal';
-var backendPort = process.env.BACK_PORT || 8080;
+var backendHost = process.env.BACK_HOST;
+var backendPort = process.env.BACK_PORT;
 // Create our express app
 var app = express();
 
@@ -75,4 +75,4 @@ app.get('/pending', function(req, res){
     })
 })
 console.log("server listening through port: " + process.env.PORT);
-app.listen(process.env.PORT || 3030);
+app.listen(process.env.PORT);

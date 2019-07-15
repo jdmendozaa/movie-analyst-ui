@@ -1,8 +1,42 @@
+'use strict';
+
+
 // Declare our dependencies
 var express = require('express');
 var request = require('superagent');
 var backendHost = process.env.BACK_HOST;
 var backendPort = process.env.BACK_PORT;
+var os = require('os');
+var ifaces = os.networkInterfaces();
+
+function getIpAdresses(){
+
+  var ipAdresses= "";
+  Object.keys(ifaces).forEach(function (ifname) {
+    var alias = 0;
+  
+    ifaces[ifname].forEach(function (iface) {
+      if ('IPv4' !== iface.family || iface.internal !== false) {
+        // skip over internal (i.e. 127.0.0.1) and non-ipv4 addresses
+        return;
+      }
+  
+      if (alias >= 1) {
+        // this single interface has multiple ipv4 addresses
+        ipAdresses += ifname + ': ' + alias, iface.address ;
+      } else {
+        // this interface has only one ipv4 adress
+        ipAdresses += ifname+ ': ' + iface.address;
+  
+      }
+      ++alias;
+    });
+    
+  });
+  
+  return ipAdresses;
+};
+
 // Create our express app
 var app = express();
 
@@ -74,5 +108,25 @@ app.get('/pending', function(req, res){
       }
     })
 })
+
+app.get('/front/ip', function(req, res){
+  var backIp = getIpAdresses();
+  res.json(backIp)
+})
+
+app.get('/back/ip', function(req, res){
+  request
+    .get('http://'+backendHost + ':' + backendPort + '/ip')
+    .set('Authorization', 'Bearer ' + req.access_token)
+    .end(function(err, data) {
+      if(data.status == 403){
+        res.send(403, '403 Forbidden');
+      } else {
+        var ip = data.body;
+        res.json(ip);
+      }
+    })
+})
+
 console.log("server listening through port: " + process.env.PORT);
 app.listen(process.env.PORT);

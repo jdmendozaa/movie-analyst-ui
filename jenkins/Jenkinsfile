@@ -24,7 +24,7 @@ pipeline {
             }
             post {
                 success {
-                    sh 'tar -cvf dist.tar dist/'
+                    sh 'tar -cvf dist.tar dist/ package.json package-lock.json'
                 }
             }
         }

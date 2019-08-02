@@ -7,13 +7,19 @@ pipeline {
     stages {
         stage('Install dependencies') {
             steps {
-                sh 'npmmmm installmmm'
+                sh 'npm install'
             }
         }
 
         stage('Test') {
             steps {
                 sh 'npm test'
+            }
+            post {
+                always {
+                    sh 'tar -cvf test-results.tar mochawesome-report/'
+                    archiveArtifacts artifacts: 'test-results.tar', fingerprint: true
+                }
             }
         }
 
@@ -27,13 +33,6 @@ pipeline {
                     archiveArtifacts artifacts: 'dist.tar', fingerprint: true
                 }
             }
-        }
-    }
-
-    post {
-        always {
-            sh 'tar -cvf test-results.tar mochawesome-report/'
-            archiveArtifacts artifacts: 'test-results.tar', fingerprint: true
         }
     }
 }

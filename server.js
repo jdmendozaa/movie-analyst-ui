@@ -4,6 +4,7 @@
 // Declare our dependencies
 var express = require('express');
 var request = require('superagent');
+
 var backendHost = process.env.BACK_HOST;
 var backendPort = process.env.BACK_PORT;
 var os = require('os');
@@ -42,8 +43,8 @@ var app = express();
 
 // Set the view engine to use EJS as well as set the default views directory
 app.set('view engine', 'ejs');
-app.set('views', __dirname + '/public/views/');
-
+app.engine('ejs', require('ejs').__express); //<-- this
+app.set('views', __dirname + '/public/views');
 // This tells Express out of which directory to serve static assets like CSS and images
 app.use(express.static(__dirname + '/public'));
 
@@ -130,3 +131,4 @@ app.get('/back/ip', function(req, res){
 
 console.log("server listening through port: " + process.env.PORT);
 app.listen(process.env.PORT);
+module.exports = app;

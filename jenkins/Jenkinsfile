@@ -6,10 +6,33 @@ pipeline {
         }
     }
     stages {
-        stage('Build') { 
+        stage('Install dependencies') {
             steps {
-                sh 'echo working!! Node version is $(node -v)' 
+                sh 'npm install'
             }
+        }
+
+        stage('Test') {
+            steps {
+                sh 'npm test'
+            }
+        }
+
+        stage('Build') {
+            steps {
+                sh 'npm run build'
+            }
+            post {
+                success {
+                    sh 'tar -cvf dist.tar dist/'
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            archiveArtifacts artifacts: 'dist.tar', fingerprint: true
         }
     }
 }

@@ -7,7 +7,7 @@ pipeline {
     stages {
         stage('Install dependencies') {
             steps {
-                sh 'npm install'
+                sh 'npmmmm installmmm'
             }
         }
 
@@ -19,7 +19,7 @@ pipeline {
 
         stage('Build') {
             steps {
-                sh 'npm,m run build'
+                sh 'npm run build'
             }
             post {
                 success {
@@ -34,12 +34,6 @@ pipeline {
         always {
             sh 'tar -cvf test-results.tar mochawesome-report/'
             archiveArtifacts artifacts: 'test-results.tar', fingerprint: true
-        }
-
-        failure {
-            mail to: 'jmendozaa@psl.com.co', 
-            subject: 'Failed Pipeline: ${currentBuild.fullDisplayName}',
-            body: "Something is wrong with ${env.BUILD_URL}"
         }
     }
 }

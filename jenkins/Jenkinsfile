@@ -2,7 +2,6 @@ pipeline {
     agent {
         docker {
             image 'node:12.6.0' 
-            args '-p 3000:3000' 
         }
     }
     stages {
@@ -33,7 +32,8 @@ pipeline {
 
     post {
         always {
-            archiveArtifacts artifacts: 'test-results.xml', fingerprint: true
+            sh 'tar -cvf test-results.tar mochawesome-report/'
+            archiveArtifacts artifacts: 'test-results.tar', fingerprint: true
         }
     }
 }

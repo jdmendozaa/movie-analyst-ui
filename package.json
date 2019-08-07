@@ -6,7 +6,7 @@
   "main": "server.js",
   "scripts": {
     "test": "mocha test --reporter mocha-junit-reporter",
-    "build": "rm -rf dist && webpack --mode development"
+    "build": "rm -rf dist && webpack --mode development && cp package.json dist/package.json && cp package-lock.json dist/package-lock.json"
   },
   "repository": {
     "type": "git",

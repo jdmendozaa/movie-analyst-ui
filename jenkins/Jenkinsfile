@@ -27,13 +27,13 @@ pipeline {
                 }
             }
         }
-
+/*
         stage('Build infrastructure') {
             steps {
 
             }
         }
 
-        
+ */       
     }
 }

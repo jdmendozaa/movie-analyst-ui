@@ -1,0 +1,51 @@
+pipeline {
+    agent {
+        docker {
+            image 'goforgold/build-container:latest'
+        }
+    }
+    stages {
+        stage('Install dependencies') {
+            steps {
+                sh 'npm install'
+            }
+        }
+
+        stage('Test') {
+            steps {
+                sh 'npm test'
+            }
+            
+        }
+
+        stage('Build code') {
+            steps {
+                sh 'npm run build'
+            }
+            post {
+                success {
+                    sh 'tar -cvf dist.tar dist/ package.json package-lock.json'
+                    archiveArtifacts artifacts: 'dist.tar', fingerprint: true
+                }
+            }
+        }
+
+        stage('Build packer image') {
+            steps {
+                sh 'npm run build'
+            }
+            post {
+                success {
+                    sh 'tar -cvf dist.tar dist/ package.json package-lock.json'
+                    archiveArtifacts artifacts: 'dist.tar', fingerprint: true
+                }
+            
+        }
+    }
+
+    post {
+        always {
+            junit 'test-results.xml'
+        }
+    }
+}

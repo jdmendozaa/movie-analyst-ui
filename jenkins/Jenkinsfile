@@ -94,8 +94,10 @@ pipeline {
     post {
         
         always {
-            agent any
-            junit 'test-results.xml'
+            node('master') {
+                junit 'test-results.xml'
+            }
+            
         }
     }
 }

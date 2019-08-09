@@ -1,4 +1,5 @@
 pipeline {
+
     agent none
 
     environment {
@@ -7,7 +8,43 @@ pipeline {
         AWS_DEFAULT_REGION    = credentials('AWS_DEFAULT_REGION')
     }
 
-  stages {
+    stages {
+        stage('Install dependencies') {
+            steps {
+                sh 'npm install'
+            }
+        }
+
+        stage('Test') {
+            steps {
+                sh 'npm test'
+            }
+            
+        }
+
+        stage('Build code') {
+            steps {
+                sh 'npm run build'
+            }
+            post {
+                success {
+                    sh 'tar -cvf dist.tar dist/ package.json package-lock.json'
+                    archiveArtifacts artifacts: 'dist.tar', fingerprint: true
+                }
+            }
+        }
+
+        stage('Build packer image') {
+            agent { 
+                docker{
+                    image 'hashicorp/packer:1.4.2 '
+                    args '--entrypoint=\'\''
+                } 
+            }
+            steps {
+                sh 'packer build packer/image.json'
+            }
+        }
 
         stage('Build infrastructure') {
             agent { 
@@ -16,6 +53,7 @@ pipeline {
                     args '--entrypoint=\'\''
                 }  
             }
+            
             steps {
                 sh 'mkdir -p terraform'
                 dir("terraform"){
@@ -28,12 +66,12 @@ pipeline {
                 }
             }
         }
-
-   /*     stage('Clean') {
-            agent any
-            steps {
-                sh 'docker system prune --all --volumes --force'
-            }
-        }*/   
+        
     }
+
+    post {
+            always {
+                junit 'test-results.xml'
+            }
+        }
 }

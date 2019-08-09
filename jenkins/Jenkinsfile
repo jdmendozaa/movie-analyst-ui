@@ -1,5 +1,5 @@
 pipeline {
-    agent any
+    agent none
 
     environment {
         AWS_ACCESS_KEY_ID     = credentials('AWS_ACCESS_KEY_ID')
@@ -9,7 +9,7 @@ pipeline {
 
   stages {
 
- /*         stage('Build infrastructure') {
+        stage('Build infrastructure') {
             agent { docker 'hashicorp/terraform:0.12.6' }
             steps {
                 sh 'mkdir -p terraform'
@@ -22,12 +22,13 @@ pipeline {
                     }
                 }
             }
-        }*/
+        }
 
-        stage('Clean') {
+   /*     stage('Clean') {
+            agent any
             steps {
                 sh 'docker system prune --all --volumes --force'
             }
-        }   
+        }*/   
     }
 }

@@ -1,6 +1,11 @@
 pipeline {
 
-    agent none
+    agent { 
+        docker{
+            image '12.8.0-alpine'
+            args '--entrypoint=\'\''
+        } 
+    }
 
     environment {
         AWS_ACCESS_KEY_ID     = credentials('AWS_ACCESS_KEY_ID')
@@ -9,13 +14,16 @@ pipeline {
     }
 
     stages {
+        
         stage('Install dependencies') {
+
             steps {
                 sh 'npm install'
             }
         }
 
         stage('Test') {
+            
             steps {
                 sh 'npm test'
             }
@@ -53,7 +61,7 @@ pipeline {
                     args '--entrypoint=\'\''
                 }  
             }
-            
+
             steps {
                 sh 'mkdir -p terraform'
                 dir("terraform"){

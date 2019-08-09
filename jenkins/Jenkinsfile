@@ -9,7 +9,7 @@ pipeline {
             steps {
                 sh 'mkdir -p terraform'
                 dir("terraform"){
-                    git url: 'https://github.com/AtlasBID/CalibrationResults.git'
+                    git url: 'https://github.com/jdmendozaa/Ramp-Up-Code.git'
                     sh 'ls'
                 }
             }

@@ -30,7 +30,7 @@ pipeline {
             }
         }
 
-        stage('Build packer image') {
+        stage('Build packer image') {   
             steps {
                 sh 'npm run build'
             }
@@ -40,12 +40,13 @@ pipeline {
                     archiveArtifacts artifacts: 'dist.tar', fingerprint: true
                 }
             
+            }
         }
-    }
 
-    post {
-        always {
-            junit 'test-results.xml'
+        post {
+            always {
+                junit 'test-results.xml'
+            }
         }
     }
 }

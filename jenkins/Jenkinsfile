@@ -1,21 +1,3 @@
-/*pipeline {
-    agent {
-        docker {
-            image 'goforgold/build-container:latest'
-        }
-    }
-    stages {
-        stage('Install dependencies') {
-            steps {
-                sh 'mkdir -p terraform'
-                dir('terraform') {
-                    git url: 'https://github.com/AtlasBID/CalibrationResults.git'
-                    sh 'ls'
-                }
-            }
-        }
-}*/
-
 pipeline {
     agent {
         docker {
@@ -48,7 +30,7 @@ pipeline {
             }
         }
 
-        stage('Build packer image') {
+        stage('Build packer image') {   
             steps {
                 sh 'npm run build'
             }
@@ -58,12 +40,13 @@ pipeline {
                     archiveArtifacts artifacts: 'dist.tar', fingerprint: true
                 }
             
+            }
         }
-    }
 
-    post {
-        always {
-            junit 'test-results.xml'
+        post {
+            always {
+                junit 'test-results.xml'
+            }
         }
     }
 }

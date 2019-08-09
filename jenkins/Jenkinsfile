@@ -10,7 +10,12 @@ pipeline {
   stages {
 
         stage('Build infrastructure') {
-            agent { docker 'hashicorp/terraform:0.12.6' }
+            agent { 
+                docker{
+                    image 'hashicorp/terraform:0.12.6'
+                    args '--entrypoint=\'\''
+                }  
+            }
             steps {
                 sh 'mkdir -p terraform'
                 dir("terraform"){

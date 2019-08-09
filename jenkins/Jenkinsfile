@@ -2,7 +2,7 @@ pipeline {
 
     agent { 
         docker{
-            image '12.8.0-alpine'
+            image 'node:12.8.0-alpine'
             args '--entrypoint=\'\''
         } 
     }
@@ -81,5 +81,5 @@ pipeline {
             always {
                 junit 'test-results.xml'
             }
-        }
+    }
 }

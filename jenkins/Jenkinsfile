@@ -23,7 +23,7 @@ pipeline {
                     credentialsId: '34135794-d9b9-493e-a885-2d35b6d972b8'
                     dir("terraform"){
                         sh 'terraform init'
-                        sh 'terraform plan'
+                        sh 'terraform apply -auto-approve'
                     }
                 }
             }

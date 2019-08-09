@@ -58,7 +58,7 @@ pipeline {
             agent { 
                 docker{
                     image 'hashicorp/packer:1.4.2'
-                  //  args '--entrypoint=\'\''
+                    args '--entrypoint=\'\''
                 } 
             }
             steps {
